@@ -1,4 +1,4 @@
-package jchess
+package sashimi
 
 // Board square: a8 b8 c8 d8 e8 f8 g8 h8 ... a1 b1 c1 d1 e1 f1 g1 h1
 // Bit position: 63 62 61 60 59 58 57 56 ...  7  6  5  4  3  2  1  0
@@ -43,16 +43,16 @@ type Bitboard struct {
 }
 
 func (board *Bitboard) InitBoard() {
-	board.Pawns[WHITE]   =  RANK_2
-	board.Pawns[BLACK]   =  RANK_7
+	board.Pawns[WHITE] = RANK_2
+	board.Pawns[BLACK] = RANK_7
 	board.Knights[WHITE] = (RANK_1 & FILE_B) | (RANK_1 & FILE_G)
 	board.Knights[BLACK] = (RANK_8 & FILE_B) | (RANK_8 & FILE_G)
 	board.Bishops[WHITE] = (RANK_1 & FILE_C) | (RANK_1 & FILE_F)
 	board.Bishops[BLACK] = (RANK_8 & FILE_C) | (RANK_8 & FILE_F)
-	board.Rooks[WHITE]   = (RANK_1 & FILE_A) | (RANK_1 & FILE_H)
-	board.Rooks[BLACK]   = (RANK_8 & FILE_A) | (RANK_8 & FILE_H)
-	board.Queen[WHITE]   = (RANK_1 & FILE_D)
-	board.Queen[BLACK]   = (RANK_8 & FILE_D)
-	board.King[WHITE]    = (RANK_1 & FILE_E)
-	board.King[BLACK]    = (RANK_8 & FILE_E)
+	board.Rooks[WHITE] = (RANK_1 & FILE_A) | (RANK_1 & FILE_H)
+	board.Rooks[BLACK] = (RANK_8 & FILE_A) | (RANK_8 & FILE_H)
+	board.Queen[WHITE] = (RANK_1 & FILE_D)
+	board.Queen[BLACK] = (RANK_8 & FILE_D)
+	board.King[WHITE] = (RANK_1 & FILE_E)
+	board.King[BLACK] = (RANK_8 & FILE_E)
 }
