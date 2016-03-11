@@ -1,7 +1,11 @@
-package sashimi
-
 // Board square: a8 b8 c8 d8 e8 f8 g8 h8 ... a1 b1 c1 d1 e1 f1 g1 h1
 // Bit position: 63 62 61 60 59 58 57 56 ...  7  6  5  4  3  2  1  0
+
+package sashimi
+
+import (
+	"fmt"
+)
 
 const (
 	WHITE = iota
@@ -55,4 +59,62 @@ func (board *Bitboard) InitBoard() {
 	board.Queen[BLACK] = (RANK_8 & FILE_D)
 	board.King[WHITE] = (RANK_1 & FILE_E)
 	board.King[BLACK] = (RANK_8 & FILE_E)
+}
+
+func (board *Bitboard) ToArray() [6][2]uint64 {
+	var values [6][2]uint64
+	values[0] = board.Pawns
+	values[1] = board.Knights
+	values[2] = board.Bishops
+	values[3] = board.Rooks
+	values[4] = board.Queen
+	values[5] = board.King
+	return values
+}
+
+// dump the board to stdout
+func (board *Bitboard) DumpBoard() {
+	var mask uint64
+	var all uint64 = EMPTY
+	var count int = 0
+
+	vals := board.ToArray()
+	for j := 0; j < 6; j++ {
+		for k := 0; k < 2; k++ {
+			all = all | vals[j][k]
+		}
+	}
+
+	for mask = 1 << 63; mask > 0; mask >>= 1 {
+		if count%8 == 0 {
+			fmt.Printf("\n")
+		}
+		count++
+
+		if all&mask > 0 {
+			fmt.Printf("1 ")
+		} else {
+			fmt.Printf("0 ")
+		}
+	}
+	fmt.Printf("\n\n")
+}
+
+func PushPawns(pawns uint64, color int) uint64 {
+	if color == WHITE {
+		return pawns << 8
+	} else if color == BLACK {
+		return pawns >> 8
+	} else {
+		return pawns
+	}
+}
+
+func MoveKnights(knights uint64) uint64 {
+	new_knights := EMPTY
+	moves := [4]uint64{15, 17, 6, 10}
+	for i := 0; i < 4; i++ {
+		new_knights = new_knights | (knights << moves[i]) | knights>>moves[i]
+	}
+	return new_knights
 }

@@ -5,29 +5,35 @@ import (
 	"testing"
 )
 
-func TestBoard(t *testing.T) {
+func TestInit(t *testing.T) {
 	board := new(Bitboard)
-
 	board.InitBoard()
 	if board.Pawns[WHITE] != RANK_2 {
 		t.Error("Board initialization failed")
 	}
+}
 
-	// dump the board to stdout
-	var mask uint64
-	var count int = 0
+func TestPrint(t *testing.T) {
+	fmt.Printf("\nFull board\n")
+	board := new(Bitboard)
+	board.InitBoard()
+	board.DumpBoard()
+}
 
-	for mask = 1 << 63; mask > 0; mask >>= 1 {
-		if count%8 == 0 {
-			fmt.Printf("\n")
-		}
-		count++
+func TestPushPawns(t *testing.T) {
+	fmt.Printf("Pawns\n")
+	board := new(Bitboard)
+	board.InitBoard()
+	board.Pawns[WHITE] = PushPawns(board.Pawns[WHITE], WHITE)
+	board.Pawns[BLACK] = PushPawns(board.Pawns[BLACK], BLACK)
+	board.DumpBoard()
+}
 
-		if DIAG_A1_H8&mask > 0 {
-			fmt.Printf("1 ")
-		} else {
-			fmt.Printf("0 ")
-		}
-	}
-	fmt.Printf("\n\n")
+func TestMoveKnights(t *testing.T) {
+	fmt.Printf("Knights\n")
+	board := new(Bitboard)
+	board.InitBoard()
+	board.Knights[WHITE] = MoveKnights(board.Knights[WHITE])
+	board.Knights[BLACK] = MoveKnights(board.Knights[BLACK])
+	board.DumpBoard()
 }
