@@ -1,17 +1,16 @@
-// Board square: a8 b8 c8 d8 e8 f8 g8 h8 ... a1 b1 c1 d1 e1 f1 g1 h1
-// Bit position: 63 62 61 60 59 58 57 56 ...  7  6  5  4  3  2  1  0
-
 package sashimi
 
 import (
 	"fmt"
 )
 
+// enum to distinguish white and black pieces
 const (
 	WHITE = iota
 	BLACK
 )
 
+// constants corresponding to various patterns on the board
 const (
 	EMPTY         uint64 = 0
 	UNIVERSE      uint64 = 0xffffffffffffffff
@@ -37,6 +36,8 @@ const (
 	DARK_SQUARES  uint64 = ^LIGHT_SQUARES
 )
 
+// board square: a8 b8 c8 d8 e8 f8 g8 h8 ... a1 b1 c1 d1 e1 f1 g1 h1
+// bit position: 63 62 61 60 59 58 57 56 ...  7  6  5  4  3  2  1  0
 type Bitboard struct {
 	Pawns   [2]uint64
 	Knights [2]uint64
@@ -46,6 +47,7 @@ type Bitboard struct {
 	King    [2]uint64
 }
 
+// setup the board for play
 func (board *Bitboard) InitBoard() {
 	board.Pawns[WHITE] = RANK_2
 	board.Pawns[BLACK] = RANK_7
@@ -61,6 +63,7 @@ func (board *Bitboard) InitBoard() {
 	board.King[BLACK] = (RANK_8 & FILE_E)
 }
 
+// return an array of all board pieces
 func (board *Bitboard) ToArray() [6][2]uint64 {
 	var values [6][2]uint64
 	values[0] = board.Pawns
@@ -72,18 +75,22 @@ func (board *Bitboard) ToArray() [6][2]uint64 {
 	return values
 }
 
-// dump the board to stdout
-func (board *Bitboard) DumpBoard() {
-	var mask uint64
-	var all uint64 = EMPTY
-	var count int = 0
-
+// return a uint64 that contains the whole board
+func (board *Bitboard) GetAll() uint64 {
 	vals := board.ToArray()
+	all := EMPTY
 	for j := 0; j < 6; j++ {
 		for k := 0; k < 2; k++ {
 			all = all | vals[j][k]
 		}
 	}
+	return all
+}
+
+// dump the board to stdout
+func (board *Bitboard) DumpBoard(piece uint64) {
+	var mask uint64
+	var count int = 0
 
 	for mask = 1 << 63; mask > 0; mask >>= 1 {
 		if count%8 == 0 {
@@ -91,7 +98,7 @@ func (board *Bitboard) DumpBoard() {
 		}
 		count++
 
-		if all&mask > 0 {
+		if piece&mask > 0 {
 			fmt.Printf("1 ")
 		} else {
 			fmt.Printf("0 ")
@@ -100,6 +107,7 @@ func (board *Bitboard) DumpBoard() {
 	fmt.Printf("\n\n")
 }
 
+// push pawns one square forward
 func PushPawns(pawns uint64, color int) uint64 {
 	if color == WHITE {
 		return pawns << 8
@@ -110,8 +118,9 @@ func PushPawns(pawns uint64, color int) uint64 {
 	}
 }
 
+// generate knight movement patterns
 func MoveKnights(knights uint64) uint64 {
-	new_knights := EMPTY
+	new_knights := knights
 	moves := [4]uint64{15, 17, 6, 10}
 	for i := 0; i < 4; i++ {
 		new_knights = new_knights | (knights << moves[i]) | knights>>moves[i]
