@@ -5,15 +5,13 @@ import (
 )
 
 func TestInit(t *testing.T) {
-	board := new(Bitboard)
-	board.InitBoard()
+	board := NewBoard()
 	if board.Pawns[WHITE] != RANK_2 {
 		t.Error("Board initialization failed")
 	}
 }
 
 func TestPrint(t *testing.T) {
-	board := new(Bitboard)
-	board.InitBoard()
+	board := NewBoard()
 	board.DumpBoard(board.GetAll())
 }

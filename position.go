@@ -1,17 +1,21 @@
 package sashimi
 
 type Position struct {
-	Bitboard *Board
-	int      Side           // WHITE or BLACK to move
-	int      MovesSincePawn // number of moves since last pawn push or capture
-	bool     CanCastle
-	uint64   LastMove
+	Board          *Bitboard
+	Side           int // WHITE or BLACK to move
+	MovesSincePawn int // number of moves since last pawn push or capture
+	CanCastleRight bool
+	CanCastleLeft  bool
+	LastMove       uint64
 }
 
-func (pos *Position) SetPosition(Bitboard *b, int s, int m, bool c, unint64 lm) {
+func NewPosition(b *Bitboard, s int, m int, cr bool, cl bool, lm uint64) *Position {
+	pos := new(Position)
 	pos.Board = b
 	pos.Side = s
 	pos.MovesSincePawn = m
-	pos.CanCastle = c
+	pos.CanCastleRight = cr
+	pos.CanCastleLeft = cl
 	pos.LastMove = lm
+	return pos
 }

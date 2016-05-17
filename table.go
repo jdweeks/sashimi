@@ -6,14 +6,16 @@ import (
 )
 
 // transposition table (stores results of previous searches)
-type Table struct {
+type TransTable struct {
 	Keys [781]int64
 }
 
 // this table uses the Zobrist hashing technique
-func (table *Table) InitTable() {
+func NewTable() *TransTable {
+	table := new(TransTable)
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for j := 0; j < 781; j++ {
 		table.Keys[j] = r.Int63()
 	}
+	return table
 }

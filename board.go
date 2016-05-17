@@ -48,7 +48,8 @@ type Bitboard struct {
 }
 
 // setup the board for play
-func (board *Bitboard) InitBoard() {
+func NewBoard() *Bitboard {
+	board := new(Bitboard)
 	board.Pawns[WHITE] = RANK_2
 	board.Pawns[BLACK] = RANK_7
 	board.Knights[WHITE] = (RANK_1 & FILE_B) | (RANK_1 & FILE_G)
@@ -61,6 +62,7 @@ func (board *Bitboard) InitBoard() {
 	board.Queen[BLACK] = (RANK_8 & FILE_D)
 	board.King[WHITE] = (RANK_1 & FILE_E)
 	board.King[BLACK] = (RANK_8 & FILE_E)
+	return board
 }
 
 // return an array of all board pieces
