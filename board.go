@@ -106,12 +106,11 @@ func (board *Bitboard) PrintBoard() {
 		}
 	}
 
-	result := string(outBytes[:])
 	for i := 0; i < 64; i++ {
 		if i%8 == 0 {
 			fmt.Printf("\n")
 		}
-		fmt.Printf("%c ", result[i])
+		fmt.Printf("%c ", outBytes[i])
 	}
 	fmt.Printf("\n\n")
 }
