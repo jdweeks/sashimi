@@ -14,4 +14,8 @@ func TestInit(t *testing.T) {
 func TestPrint(t *testing.T) {
 	board := NewBoard()
 	board.PrintBoard()
+	board.Knights[WHITE] = MoveKnights(board.Knights[WHITE])
+	board.PrintBoard()
+	board.Pawns[WHITE] = PushPawns(board.Pawns[WHITE], WHITE)
+	board.PrintBoard()
 }

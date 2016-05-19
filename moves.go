@@ -13,10 +13,10 @@ func PushPawns(pawns uint64, color int) uint64 {
 
 // generate knight movement patterns
 func MoveKnights(knights uint64) uint64 {
-	new_knights := knights
+	newKnights := knights
 	moves := [4]uint64{15, 17, 6, 10}
 	for i := 0; i < 4; i++ {
-		new_knights = new_knights | (knights << moves[i]) | knights>>moves[i]
+		newKnights = newKnights | (knights << moves[i]) | knights>>moves[i]
 	}
-	return new_knights
+	return newKnights
 }
