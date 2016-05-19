@@ -13,5 +13,5 @@ func TestInit(t *testing.T) {
 
 func TestPrint(t *testing.T) {
 	board := NewBoard()
-	board.DumpBoard(board.GetAll())
+	board.PrintBoard()
 }

@@ -66,7 +66,7 @@ func NewBoard() *Bitboard {
 }
 
 // return an array of all board pieces
-func (board *Bitboard) ToArray() [6][2]uint64 {
+func (board *Bitboard) ToArray() [12]uint64 {
 	var values [6][2]uint64
 	values[0] = board.Pawns
 	values[1] = board.Knights
@@ -74,37 +74,57 @@ func (board *Bitboard) ToArray() [6][2]uint64 {
 	values[3] = board.Rooks
 	values[4] = board.Queen
 	values[5] = board.King
-	return values
-}
 
-// return a uint64 that contains the whole board
-func (board *Bitboard) GetAll() uint64 {
-	vals := board.ToArray()
-	all := EMPTY
+	i := 0
+	var linear [12]uint64
 	for j := 0; j < 6; j++ {
 		for k := 0; k < 2; k++ {
-			all = all | vals[j][k]
+			linear[i] = values[j][k]
+			i++
 		}
 	}
-	return all
+	return linear
 }
 
-// dump the board to stdout
-func (board *Bitboard) DumpBoard(piece uint64) {
+// prints the board to stdout
+func (board *Bitboard) PrintBoard() {
+	pieces := board.ToArray()
+	pieceChars := "+*nNbBrRqQkK"
 	var mask uint64
-	var count int = 0
 
-	for mask = 1 << 63; mask > 0; mask >>= 1 {
-		if count%8 == 0 {
-			fmt.Printf("\n")
-		}
-		count++
+	var outBytes [64]byte
+	for k := 0; k < 64; k++ {
+		outBytes[k] = '.'
+	}
 
-		if piece&mask > 0 {
-			fmt.Printf("1 ")
-		} else {
-			fmt.Printf("0 ")
+	for j := 0; j < 12; j++ {
+		for mask = 1 << 63; mask > 0; mask >>= 1 {
+			comp := pieces[j] & mask
+			if comp > 0 {
+				outBytes[firstOne(comp)] = pieceChars[j]
+			}
 		}
 	}
+
+	result := string(outBytes[:])
+	for i := 0; i < 64; i++ {
+		if i%8 == 0 {
+			fmt.Printf("\n")
+		}
+		fmt.Printf("%c ", result[i])
+	}
 	fmt.Printf("\n\n")
+}
+
+// returns the index of the first one bit in the given integer
+func firstOne(val uint64) int {
+	var mask uint64
+	count := 0
+	for mask = 1 << 63; mask > 0; mask >>= 1 {
+		if val&mask > 0 {
+			return count
+		}
+		count++
+	}
+	return -1
 }
