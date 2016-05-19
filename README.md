@@ -1,2 +1,2 @@
 # sashimi
-A mini chess engine, written in Go
+A mini chess engine
